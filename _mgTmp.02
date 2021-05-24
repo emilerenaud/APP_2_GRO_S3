@@ -1,0 +1,53 @@
+   (1) NewtonianFrame n;
+   (2) RigidBody A,B,C
+   (3) Point Bc(B)
+   (4) Point Cb(C)
+   (5) Point W(C)
+   (6) Variable Qb'',Qc''
+   (7) Constant La = 0.07 m, Lb = 0.472 m, Lc = 0.206 m, wTrailer = 0.2 m
+   (8) A.RotateZ(n,0)
+-> (9) A_n = [1, 0, 0;  0, 1, 0;  0, 0, 1]
+-> (10) w_A_n> = 0>
+-> (11) alf_A_n> = 0>
+
+   (12) B.RotateZ(A,Qb)
+-> (13) B_A = [cos(Qb), sin(Qb), 0;  -sin(Qb), cos(Qb), 0;  0, 0, 1]
+-> (14) w_B_A> = Qb'*Bz>
+-> (15) w_B_n> = Qb'*Bz>
+-> (16) alf_B_A> = Qb''*Bz>
+-> (17) alf_B_n> = Qb''*Bz>
+
+   (18) C.RotateZ(B,Qc)
+-> (19) C_B = [cos(Qc), sin(Qc), 0;  -sin(Qc), cos(Qc), 0;  0, 0, 1]
+-> (20) w_C_B> = Qc'*Cz>
+-> (21) w_C_n> = (Qb'+Qc')*Bz>
+-> (22) alf_C_B> = Qc''*Cz>
+-> (23) alf_C_n> = (Qb''+Qc'')*Bz>
+
+   (24) Bo.Translate(no,La*cos(Qb)*Ax> + La*sin(Qb)*Ay>)
+-> (25) p_no_Bo> = La*cos(Qb)*Ax> + La*sin(Qb)*Ay>
+-> (26) v_Bo_n> = -La*sin(Qb)*Qb'*Ax> + La*cos(Qb)*Qb'*Ay>
+-> (27) a_Bo_n> = -La*(cos(Qb)*Qb'^2+sin(Qb)*Qb'')*Ax> - La*(sin(Qb)*Qb'^2-cos(
+        Qb)*Qb'')*Ay>
+
+   (28) Bc.Translate(Bo,-Lb*Bx>)
+-> (29) p_Bo_Bc> = -Lb*Bx>
+-> (30) v_Bc_n> = -La*sin(Qb)*Qb'*Ax> + La*cos(Qb)*Qb'*Ay> - Lb*Qb'*By>
+-> (31) a_Bc_n> = -La*(cos(Qb)*Qb'^2+sin(Qb)*Qb'')*Ax> - La*(sin(Qb)*Qb'^2-cos(
+        Qb)*Qb'')*Ay> + Lb*Qb'^2*Bx> - Lb*Qb''*By>
+
+   (32) Cb.Translate(Bo,0>)
+-> (33) p_Bo_Cb> = 0>
+-> (34) v_Cb_n> = -La*sin(Qb)*Qb'*Ax> + La*cos(Qb)*Qb'*Ay>
+-> (35) a_Cb_n> = -La*(cos(Qb)*Qb'^2+sin(Qb)*Qb'')*Ax> - La*(sin(Qb)*Qb'^2-cos(
+        Qb)*Qb'')*Ay>
+
+   (36) W.Translate(Cb,-Lc*Cx> - wTrailer/2 * Cy>)
+-> (37) p_Cb_W> = -Lc*Cx> - 0.5*wTrailer*Cy>
+-> (38) v_W_n> = -La*sin(Qb)*Qb'*Ax> + La*cos(Qb)*Qb'*Ay> + 0.5*wTrailer*(Qb'+
+        Qc')*Cx> - Lc*(Qb'+Qc')*Cy>
+-> (39) a_W_n> = -La*(cos(Qb)*Qb'^2+sin(Qb)*Qb'')*Ax> - La*(sin(Qb)*Qb'^2-cos(
+        Qb)*Qb'')*Ay> + (Lc*(Qb'+Qc')^2+0.5*wTrailer*(Qb''+Qc''))*Cx> + (0.5*
+        wTrailer*(Qb'+Qc')^2-Lc*(Qb''+Qc''))*Cy>
+
+   (40) 

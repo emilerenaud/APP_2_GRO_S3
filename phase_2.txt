@@ -1,0 +1,21 @@
+
+
+NewtonianFrame n;
+RigidBody A,B,C
+
+Point Bc(B)
+Point Cb(C)
+Point W(C)
+
+Variable Qb'',Qc''
+Constant La = 0.07 m, Lb = 0.472 m, Lc = 0.206 m, wTrailer = 0.2 m
+
+
+A.RotateZ(n,0)
+B.RotateZ(A,Qb)
+C.RotateZ(B,Qc)
+
+Bo.Translate(no,La*cos(Qb)*Ax> + La*sin(Qb)*Ay>)
+Bc.Translate(Bo,-Lb*Bx>)
+Cb.Translate(Bo,0>)
+W.Translate(Cb,-Lc*Cx> - wTrailer/2 * Cy>)
