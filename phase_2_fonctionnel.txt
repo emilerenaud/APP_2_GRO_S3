@@ -1,3 +1,4 @@
+clear
 %--------------------------------------------------------------------
 %   Physical objects.
 NewtonianFrame  N           
@@ -8,41 +9,59 @@ Variable    qB'', qC''
 Variable   Bcmx'' , Bcmy''       
 Variable    Ft ,FRx ,FRy       
 particle D , E
+
 Constant TBc= 0.03 N*m*s/rad                   % Damping entre C et B
 Constant b= 0.3 N*m*s/rad
 constant Calpha=10.125 N/rad
 Constant vTapis
+
 Constant mE     %Masse de B
 Constant mD     %Masse de B
 Constant mB = 1.232 kg %Masse de B
 Constant mC = 0.954 kg %Masse de C
+
+
 Constant LA = 0.07 m    %Distance entre Ao et Bo
 Constant LBcm = 0.242 m %Distance entre Bo et Bcm
 Constant LBwb = 0.257 m %Distance entre les roues avant et arriÃ¨re selon Bx>
+
 Constant LB = 0.472 m      %Distance entre Bo et BC/CB:				
 Constant LCw = 0.206 m     %Distance entre CB et l'axe des roues du trailer
 Constant LCmDE = 0.303 m   %Distance entre les masses D et E:
+	
+	
 % inertie
 Constant Ibzz = mB*(LBwb/4)^2
 Constant Iczz = mC*(LCmDE/4)^2
+
 %   Rotational kinematics.
 B.RotateZ( N, qB )
 C.RotateZ( B, qC )
+
 %--------------------------------------------------------------------
 %   Mass and inertia properties.
 E.setMass(mE)
 D.setMass(mD)
 B.SetMass(mB)
 C.SetMass(mC)
+
 %ajoutez inertie corps b et c
 B.SetInertia( Bcm,   0,   0,  Ibzz )
 C.SetInertia( Ccm,   0,   0,  Iczz )
+
+
 %--------------------------------------------------------------------
+
+
+
+
 %B.SetAngularVelocity( N, qb'*nz> )
 %C.SetAngularVelocity( B, qc'*nz> )
+
 %--------------------------------------------------------------------
 %   Position des points
 Bi.Translate(No,Bcmx*Nx>+Bcmy*Ny>+LBcm*Bx>)
+
 Bcm.Translate(Bi,-LBcm*Bx>)      
 Br1.Translate(Bcm,LBwb/2*Bx>)
 Br2.Translate(Bcm,-LBwb/2*Bx>)
@@ -51,32 +70,47 @@ Cb.translate(Bc,0>)
 Ccm.Translate(Cb,-LCw*Cx>)
 E.Translate(Ccm,-LCmDE/2*Cx>)
 D.Translate(Ccm,LCmDE/2*Cx>)
+
+
+
 %ajoutez la vitesse du tapis (unite de getVelocity)
 %Ccm.setVelocity(N,Ccm.getVelocity(N)+vTapis*Nx>)
 %Br1.SetVelocity(N,Br1.GetVelocity(N)+vTapis*Nx>)
 %Br2.SetVelocity(N,Br2.GetVelocity(N)+vTapis*Nx>)
+
+
 %--------------------------------------------------------------------
 %  Force lateral aux roues
 %B1drift>=Br1.getVelocity(N)
 %B2drift>=Br2.getVelocity(N)
 %Cdrift>=Ccm.getVelocity(N)
+
 alphaC=GetAngleBetweenVectors(   Ccm.getVelocity(N)+vTapis*Nx>,Cx> ,Nz>)
 alphaB1=GetAngleBetweenVectors(  Br1.getVelocity(N)+vTapis*Nx>,Bx>,Nz>)
 alphaB2=GetAngleBetweenVectors(  Br2.getVelocity(N)+vTapis*Nx>,Bx>,Nz>)
+
 Ccm.AddForce(Calpha*alphaC*Cy>)   
 Br1.addForce((Calpha*alphaB1)*By>)
 Br2.addForce((Calpha*alphaB2)*By>)
+
 %Force au pivot Cb/Bc
 %Forces de reaction
 Cb.AddForce(-FRx*Bx>-FRy*By> )    
 Bc.AddForce(FRx*Bx>+FRy*By> ) 
+
 %frottement visqueux
 B.AddTorque(C,TBc*qc'*nz>)
+
 %sys scafai
 %B.AddTorque(-b*qB'*nz>)
+
+
 %tension de la corde
 vUnitCorde>=getUnitVector(No.getPosition(Bi))  
 Bi.AddForce(Ft*vUnitCorde>)
+
+
+
 Variable W_Fw' = Br1.GetPowerForce() 
 Variable W_Rw' = Br2.GetPowerForce()
 Variable W_Ccm' = Ccm.GetPowerForce()
@@ -85,6 +119,8 @@ Variable W_Bc' = Bc.GetPowerForce()
 Variable W_Cb' = Co.GetPowerForce()
 Variable W_Bc_t' = B.GetPowerTorque(C)
 Variable W_Cb_t' = C.GetPowerTorque(B)
+
+
 Variable workSystem' = System.GetPower()
 Variable kineticSystem = System.GetKineticEnergy(N)
 Variable constante_travail =  kineticSystem - workSystem
@@ -96,56 +132,70 @@ Dynamics[1] = Dot(  B.GetDynamics(),  Nx>  )
 Dynamics[2] = Dot(  B.GetDynamics(),  Ny>  )
 Dynamics[3] = Dot(  CDE.GetDynamics(),  Nx>  )
 Dynamics[4] = Dot(  CDE.GetDynamics(),  Ny>  )
+
 Dynamics[5] = Dot(  CDE.GetDynamics(Ccm),  Nz>  )
 Dynamics[6] = Dot(  B.GetDynamics(Bcm),  Nz>  )
+
 Dynamics[7] = dt(dt(No.getDistance(Bi)-LA))
+
 %--------------------------------------------------------------------
 %   Initial values 
 %cas 1 --------------------------------------------------------------------
 %Input  qC =22 deg,  qC' = -72 deg/sec , Bcmx=-0.29199 m , Bcmx'= 0.052696 m/s
 %Input  qB = -16 deg,  qB' = -3 deg/sec , Bcmy=0.02961 m, Bcmy'= -0.066562 m/s
 %Input  vTapis= 3 mph, mE=0 kg, mD=0.192 kg 
+
 %cas 2 --------------------------------------------------------------------
 %Input  Bcmx = -0.28944 m , Bcmy = 0.043787 m ,Bcmx' = 0.077596 m/s, Bcmy' = 0.018608 m/s
 %Input qB = -19 deg, qC = 30 deg
 %Input qB' = -24 deg/s, qC' = -33 deg/s
 %Input  vTapis= 3 mph, mD=0 kg, mE=0.192 kg 
+
 %cas 3 --------------------------------------------------------------------
 %input Bcmx = -0.29901 m , Bcmy = -0.0034145 m , Bcmx' = 0.057398 m/s ,  Bcmy' = -0.18408 m/s
 %input qB = -8 deg, qC = 7 deg
 %input qB' = 18 deg/sec, qC' = -86 (deg/s)
 %Input  vTapis= 5 mph, mE=0 kg, mD=0.192 kg 
+
 %cas 4 --------------------------------------------------------------------
 %input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
 %input qB = -13 deg , qC = 25 deg
 %input qB' = -51 deg/s , qC' = 23 (deg/s)
 %Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
+
 %cas 5 --------------------------------------------------------------------
 %input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
 %input qB = -13 deg , qC = 25 deg
 %input qB' = -51 deg/s , qC' = 23 (deg/s)
 %Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
+
 %cas 6 --------------------------------------------------------------------
 %input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
 %input qB = -13 deg , qC = 25 deg
 %input qB' = -51 deg/s , qC' = 23 (deg/s)
 %Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
+
 %cas 7 --------------------------------------------------------------------
 %input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
 %input qB = -13 deg , qC = 25 deg
 %input qB' = -51 deg/s , qC' = 23 (deg/s)
 %Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
+
+
 %cas 8 --------------------------------------------------------------------
 input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.019505 m/s,  Bcmy' = -0.12383 m/s
 input qB = -13 deg, qC = 25 deg , qB' = 12.8041 deg/s, qC' = -76.6977 (deg/s)
 Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg
+
+
 % fonction pour caplha de 40 ===== Input  tFinal = 3 sec,  tStep = 0.1 sec,  absError = 1.0E-03
+
 Input  tFinal = 2.5 sec,  tStep = 0.01 sec,  absError = 1.0E-5
 %OutputPlot  t sec, qc deg , qb deg
 %OutputPlot t sec, W_Fw J, W_Rw J, W_Bo J, W_Bc J, W_Cb J, W_Bc_t J, W_Cb_t J, W_Ccm J
 %OutputPlot t sec, constante_travail,  workSystem J, kineticSystem J
+
 OutputPlot t sec, Frx N, Fry N
 ODE(Dynamics, Bcmx'',Bcmy'', qb'', qc'', Ft, FRx,FRy )  
-cd "c:\APP_2_GRO_S3"
-quit
-Genesis phase_2_fonctionnel.txt
+
+

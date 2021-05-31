@@ -116,10 +116,10 @@ Dynamics[7] = dt(dt(No.getDistance(Bi)-LA))
 %input qB' = 18 deg/sec, qC' = -86 (deg/s)
 %Input  vTapis= 5 mph, mE=0 kg, mD=0.192 kg 
 %cas 4 --------------------------------------------------------------------
-%input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
-%input qB = -13 deg , qC = 25 deg
-%input qB' = -51 deg/s , qC' = 23 (deg/s)
-%Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
+input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
+input qB = -13 deg , qC = 25 deg
+input qB' = -51 deg/s , qC' = 23 (deg/s)
+Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
 %cas 5 --------------------------------------------------------------------
 %input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
 %input qB = -13 deg , qC = 25 deg
@@ -136,16 +136,15 @@ Dynamics[7] = dt(dt(No.getDistance(Bi)-LA))
 %input qB' = -51 deg/s , qC' = 23 (deg/s)
 %Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
 %cas 8 --------------------------------------------------------------------
-input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.019505 m/s,  Bcmy' = -0.12383 m/s
-input qB = -13 deg, qC = 25 deg , qB' = 12.8041 deg/s, qC' = -76.6977 (deg/s)
-Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg
+%input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
+%input qB = -13 deg , qC = 25 deg
+%input qB' = -51 deg/s , qC' = 23 (deg/s)
+%Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
 % fonction pour caplha de 40 ===== Input  tFinal = 3 sec,  tStep = 0.1 sec,  absError = 1.0E-03
 Input  tFinal = 2.5 sec,  tStep = 0.01 sec,  absError = 1.0E-5
 %OutputPlot  t sec, qc deg , qb deg
 %OutputPlot t sec, W_Fw J, W_Rw J, W_Bo J, W_Bc J, W_Cb J, W_Bc_t J, W_Cb_t J, W_Ccm J
 %OutputPlot t sec, constante_travail,  workSystem J, kineticSystem J
-OutputPlot t sec, Frx N, Fry N
+OutputPlot t sec, Frx, Fry
 ODE(Dynamics, Bcmx'',Bcmy'', qb'', qc'', Ft, FRx,FRy )  
-cd "c:\APP_2_GRO_S3"
 quit
-Genesis phase_2_fonctionnel.txt

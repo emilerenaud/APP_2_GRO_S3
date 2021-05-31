@@ -325,6 +325,4 @@
    (213) OutputPlot t sec, Frx N, Fry N
    (214) ODE(Dynamics, Bcmx'',Bcmy'', qb'', qc'', Ft, FRx,FRy )  
 
-   (215) cd "c:\APP_2_GRO_S3"
-   (216) quit
-Genesis phase_2_fonctionnel.txt
+   (215) 

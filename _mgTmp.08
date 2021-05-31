@@ -294,10 +294,10 @@
    (182) %input qB' = 18 deg/sec, qC' = -86 (deg/s)
    (183) %Input  vTapis= 5 mph, mE=0 kg, mD=0.192 kg 
    (184) %cas 4 --------------------------------------------------------------------
-   (185) %input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
-   (186) %input qB = -13 deg , qC = 25 deg
-   (187) %input qB' = -51 deg/s , qC' = 23 (deg/s)
-   (188) %Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
+   (185) input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
+   (186) input qB = -13 deg , qC = 25 deg
+   (187) input qB' = -51 deg/s , qC' = 23 (deg/s)
+   (188) Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
    (189) %cas 5 --------------------------------------------------------------------
    (190) %input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
    (191) %input qB = -13 deg , qC = 25 deg
@@ -314,17 +314,16 @@
    (202) %input qB' = -51 deg/s , qC' = 23 (deg/s)
    (203) %Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
    (204) %cas 8 --------------------------------------------------------------------
-   (205) input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.019505 m/s,  Bcmy' = -0.12383 m/s
-   (206) input qB = -13 deg, qC = 25 deg , qB' = 12.8041 deg/s, qC' = -76.6977 (deg/s)
-   (207) Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg
-   (208) % fonction pour caplha de 40 ===== Input  tFinal = 3 sec,  tStep = 0.1 sec,  absError = 1.0E-03
-   (209) Input  tFinal = 2.5 sec,  tStep = 0.01 sec,  absError = 1.0E-5
-   (210) %OutputPlot  t sec, qc deg , qb deg
-   (211) %OutputPlot t sec, W_Fw J, W_Rw J, W_Bo J, W_Bc J, W_Cb J, W_Bc_t J, W_Cb_t J, W_Ccm J
-   (212) %OutputPlot t sec, constante_travail,  workSystem J, kineticSystem J
-   (213) OutputPlot t sec, Frx N, Fry N
-   (214) ODE(Dynamics, Bcmx'',Bcmy'', qb'', qc'', Ft, FRx,FRy )  
+   (205) %input Bcmx = -0.29975 m , Bcmy = 0.025967 m , Bcmx' = 0.079762 m/s , Bcmy' = 0.13957 m/s
+   (206) %input qB = -13 deg , qC = 25 deg
+   (207) %input qB' = -51 deg/s , qC' = 23 (deg/s)
+   (208) %Input  vTapis= 5 mph, mD=0 kg, mE=0.192 kg 
+   (209) % fonction pour caplha de 40 ===== Input  tFinal = 3 sec,  tStep = 0.1 sec,  absError = 1.0E-03
+   (210) Input  tFinal = 2.5 sec,  tStep = 0.01 sec,  absError = 1.0E-5
+   (211) %OutputPlot  t sec, qc deg , qb deg
+   (212) %OutputPlot t sec, W_Fw J, W_Rw J, W_Bo J, W_Bc J, W_Cb J, W_Bc_t J, W_Cb_t J, W_Ccm J
+   (213) %OutputPlot t sec, constante_travail,  workSystem J, kineticSystem J
+   (214) OutputPlot t sec, Frx, Fry
+   (215) ODE(Dynamics, Bcmx'',Bcmy'', qb'', qc'', Ft, FRx,FRy )  
 
-   (215) cd "c:\APP_2_GRO_S3"
    (216) quit
-Genesis phase_2_fonctionnel.txt

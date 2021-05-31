@@ -146,6 +146,4 @@ Input  tFinal = 2.5 sec,  tStep = 0.01 sec,  absError = 1.0E-5
 %OutputPlot t sec, constante_travail,  workSystem J, kineticSystem J
 OutputPlot t sec, Frx N, Fry N
 ODE(Dynamics, Bcmx'',Bcmy'', qb'', qc'', Ft, FRx,FRy )  
-cd "c:\APP_2_GRO_S3"
-quit
-Genesis phase_2_fonctionnel.txt
+

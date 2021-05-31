@@ -1,21 +1,111 @@
+clear
 
-
-NewtonianFrame n;
-RigidBody A,B,C
+NewtonianFrame N
+RigidFrame A
+RigidBody B,C
 
 Point Bc(B)
-Point Cb(C)
-Point W(C)
+Point Fw(B)
+Point Rw(B)
+Particle D
+Particle E
 
-Variable Qb'',Qc''
-Constant La = 0.07 m, Lb = 0.472 m, Lc = 0.206 m, wTrailer = 0.2 m
+Variable qB'',qC''
+Variable xBcm'', yBcm''
+Variable Tension %, FlFw, FlRw, Flt
+Variable Frx, Fry
+
+Constant La = 0.07 m, Lbhitch = 0.472 m, Lbcm = 0.242 m, Lcw = 0.206 m, Lcmb = 0.303 m, wTrailer = 0.2 m
+Constant Lbwb = 0.257 m
+Constant mB = 1.232 kg, mC = 0.954 kg, mD = 0.192 kg, mE = 0 kg
+Constant IB = mB*((Lbwb/4)^2), IC = mC*((Lcmb/4)^2)
+Constant Calpha = 10 N/rad
+%Constant vTapis = (3 / 2.237) m/s
+Constant vTapis = 3 MPH
+Constant Tvisqueux = 0.03 N*m*s/rad
+
+B.SetMass(mB)
+C.SetMass(mC)
+E.SetMass(mD)
+D.SetMass(mE)
+
+B.SetInertia(Bcm, 0, 0, IB)
+C.SetInertia(Ccm, 0, 0, IC)
+
+%A.RotateZ(N,0)
+B.RotateZ(N,qB)
+C.RotateZ(B,qC)
+
+Ao.Translate(No,0>)
+Bcm.Translate(No, xBcm*nx> + yBcm*ny>)
+Bo.Translate(Bcm,Lbcm*Bx>)
+Bc.Translate(Bo,-Lbhitch*Bx>)
+Fw.Translate(Bcm,(Lbwb/2)*Bx>)
+Rw.Translate(Bcm,(-Lbwb/2)*Bx>)
+Co.Translate(Bc,0>)
+Ccm.Translate(Bc,-Lcw*Cx>)
+%W.Translate(Bc,-Lcw*Cx> - (wTrailer/2) * Cy>)
+D.Translate(Ccm, (Lcmb/2) * Cx>)
+E.Translate(Ccm, -(Lcmb/2) * Cx>)
+
+% Set la vitesse du tapis
+Fw.SetVelocity(N, Fw.GetVelocity(N) + vTapis*Nx>)
+Rw.SetVelocity(N, Rw.GetVelocity(N) + vTapis*Nx>)
+Ccm.SetVelocity(N, Ccm.GetVelocity(N) + vTapis*Nx>)
+
+% Trouver les forces latérales
+%FlFw = Calpha * GetAngleBetweenVectors(Fw.GetVelocity(N)+vTapis*Nx>,Bx>,Bz>) 
+%FlRw = Calpha * GetAngleBetweenVectors(Rw.GetVelocity(N)+vTapis*Nx>,Bx>,Bz>) 
+%Flt  = Calpha * GetAngleBetweenVectors(Ccm.GetVelocity(N)+vTapis*Nx>,Cx>,Cz>) 
+FlFw = Calpha * GetAngleBetweenVectors(Fw.GetVelocity(N),Bx>,Bz>) 
+FlRw = Calpha * GetAngleBetweenVectors(Rw.GetVelocity(N),Bx>,Bz>) 
+Flt  = Calpha * GetAngleBetweenVectors(Ccm.GetVelocity(N),Cx>,Cz>) 
 
 
-A.RotateZ(n,0)
-B.RotateZ(A,Qb)
-C.RotateZ(B,Qc)
+% vecteur T
+%distanceFromB0ToA0 = Ao.GetDistance(Bo)
+%vT> = Ao.GetPosition(Bo) / distanceFromB0ToA0
+vT> = getUnitVector(Ao.GetPosition(Bo))
+Bo.AddForce(Tension*vT>)
 
-Bo.Translate(no,La*cos(Qb)*Ax> + La*sin(Qb)*Ay>)
-Bc.Translate(Bo,-Lb*Bx>)
-Cb.Translate(Bo,0>)
-W.Translate(Cb,-Lc*Cx> - wTrailer/2 * Cy>)
+% Force latérale
+Fw.AddForce(FlFw*By>)
+Rw.AddForce(FlRw*By>)
+Ccm.AddForce(Flt*Cy>)
+
+% force de reaction
+Bc.AddForce(Frx*Nx> + Fry*Ny>)
+Co.AddForce(-Frx*Nx> - Fry*Ny>)
+
+% force visqueux
+%B.AddTorque(C,Tvisqueux*(qC')*Nz>) % fonctionne pas plus
+B.AddTorque(C,Tvisqueux*qC'*Nz>)
+%C.AddTorque(-Tvisqueux*(qC')*Cz>)
+
+
+
+
+% Équation
+System CDE(C,D,E)
+
+eq[1] = dot(B.GetDynamics(),Nx>)
+eq[2] = dot(B.GetDynamics(),Ny>)
+eq[3] = dot(CDE.GetDynamics(),Nx>)
+eq[4] = dot(CDE.GetDynamics(),Ny>)
+eq[5] = dot(CDE.GetDynamics(Ccm),Nz>)
+eq[6] = dot(B.GetDynamics(Bcm),Nz>)
+eq[7] = dtdt(Ao.GetDistance(Bo) - La)
+
+
+Input tStep = 0.01 sec, tFinal = 2.5 sec, absError = 1.0E-06
+Input mD = 0.192 kg, mE = 0 kg
+Input  qB = -16 deg,  qB' = -3 deg/sec , xBcm=-0.29199 m, xBcm'= 0.052696 m/s
+Input  qC = 22 deg,  qC' = -72 deg/sec , yBcm=0.02961 m, yBcm'= -0.066562 m/s
+
+
+OutputPlot t sec, qB, qC
+ODE(eq,xBcm'',yBcm'',Frx,Fry,qB'',qC'',Tension)
+
+
+
+
